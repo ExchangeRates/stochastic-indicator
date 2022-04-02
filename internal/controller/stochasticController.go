@@ -25,11 +25,11 @@ func (c *StochasticController) HandleCalculate() http.HandlerFunc {
 		Value      float64   `json:"value"`
 		Period     int       `json:"period"`
 		PrevKPoint *float64  `json:"prevKPoint"`
-		ListPoints []float64 `json:"listPoints"`
+		LastPoints []float64 `json:"lastPoints"`
 	}
 	type response struct {
-		KPoint     float64   `json:"kPoint"`
-		DPoint     float64   `json:"dPoint"`
+		KPoint     float64   `json:"pointK"`
+		DPoint     float64   `json:"pointD"`
 		LastPoints []float64 `json:"lastPoints"`
 	}
 
@@ -45,7 +45,7 @@ func (c *StochasticController) HandleCalculate() http.HandlerFunc {
 			body.Value,
 			body.PrevKPoint,
 			body.Period,
-			body.ListPoints,
+			body.LastPoints,
 		)
 		if err != nil {
 			// TODO send response
@@ -55,6 +55,11 @@ func (c *StochasticController) HandleCalculate() http.HandlerFunc {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
+		respBody := response{
+			KPoint:     kPoint,
+			DPoint:     dPoint,
+			LastPoints: lastPoints,
+		}
 		if err := json.NewEncoder(w).Encode(response{
 			KPoint:     kPoint,
 			DPoint:     dPoint,
@@ -63,5 +68,6 @@ func (c *StochasticController) HandleCalculate() http.HandlerFunc {
 			// TODO send response
 			c.log.Fatalln(err)
 		}
+		c.log.Info(respBody)
 	}
 }

@@ -32,7 +32,7 @@ type calculateResponse struct {
 }
 
 func (f *emaFeignClientImpl) Calculate(prev *float64, value float64, period int) (float64, error) {
-	url := fmt.Sprintf("%s/calcualte", f.url)
+	url := fmt.Sprintf("%s/calculate", f.url)
 	var payload bytes.Buffer
 	body := calculateRequest{
 		Prev:   prev,

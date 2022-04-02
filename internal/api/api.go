@@ -34,9 +34,10 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) BindingAddressFromPort(port int) string {
+	s.log.Infof("starting on port %d", port)
 	return fmt.Sprintf(":%d", port)
 }
 
 func (s *server) configureRouter() {
-	s.router.Path("/calcualte").Handler(s.controller.HandleCalculate()).Methods(http.MethodPost)
+	s.router.Path("/calculate").Handler(s.controller.HandleCalculate()).Methods(http.MethodPost)
 }

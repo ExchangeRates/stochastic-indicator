@@ -3,6 +3,8 @@ package service
 import (
 	"math"
 	"stochastic_indicator/internal/feign"
+
+	"github.com/sirupsen/logrus"
 )
 
 type StochasticService interface {
@@ -30,6 +32,7 @@ func (s *stochasticServiceImpl) Calculate(value float64, prevKPoint *float64, pe
 	}
 
 	highest, lowest := s.highestLowest(lastPoints)
+	logrus.Infof("H: %d, L: %d", highest, lowest)
 	kPoint = s.calcualteKPoint(value, highest, lowest)
 	dPoint, err = s.emaClient.Calculate(prevKPoint, kPoint, period)
 	if err != nil {
